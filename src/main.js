@@ -1,13 +1,9 @@
-API_URL = '';
+require('dotenv').config();
 
 function hello() {
   return 'Hello World';
 }
 
-// function main() {
-// }
-//
-// p
 function btnClick() {
   const generateBtn = document.getElementById('btn');
   const wrapper = (word) => handleAPI(word);
@@ -19,7 +15,7 @@ function btnClick() {
 const options = {
   method: 'GET',
   headers: {
-    'X-RapidAPI-Key': 'redacted',
+    'X-RapidAPI-Key': process.env.WORDSAPI_KEY,
     'X-RapidAPI-Host': 'wordsapiv1.p.rapidapi.com',
   },
 };
