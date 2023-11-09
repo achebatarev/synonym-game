@@ -19,7 +19,7 @@ function btnClick() {
 const options = {
   method: 'GET',
   headers: {
-    'X-RapidAPI-Key': 'ced5222603msh018d729ca3fed5bp15a99cjsn4708f3374ffc',
+    'X-RapidAPI-Key': 'redacted',
     'X-RapidAPI-Host': 'wordsapiv1.p.rapidapi.com',
   },
 };
