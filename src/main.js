@@ -1,36 +1,53 @@
-API_URL = '';
-
+API_key = '';
+const synonymSet = new Set();
+counter = 0;
 function hello() {
   return 'Hello World';
 }
-
-// function main() {
-// }
-//
-// p
 function btnClick() {
-  const generateBtn = document.getElementById('btn');
-  const wrapper = (word) => handleAPI(word);
-  generateBtn.addEventListener('click', wrapper);
+  const word = document.getElementById('user_text').value;
+  console.log(word);
+    handleAPI(word);
 }
-
+document.getElementById('btn').addEventListener('click', btnClick);
 // send request
 // return a list of words
-const options = {
-  method: 'GET',
-  headers: {
-    'X-RapidAPI-Key': 'redacted',
-    'X-RapidAPI-Host': 'wordsapiv1.p.rapidapi.com',
-  },
-};
-
 async function handleAPI(word) {
-  const resp = await fetch('https://wordsapiv1.p.rapidapi.com/words/{word}/synonyms', options);
-  const result = resp.text();
-  console.log(result);
+  const resp = await fetch(`https://www.dictionaryapi.com/api/v3/references/thesaurus/json/${word}?key=${API_key}`);
+  const data = await resp.json();
+  console.log(data);
+
+data.forEach(entry => {
+  if (entry.meta.syns) {
+    entry.meta.syns.forEach(synonymGroup => {
+      synonymGroup.forEach(synonym => {
+        synonymSet.add(synonym);
+      });
+    });
+  }
+});
+
+console.log('Synonyms:', [...synonymSet]);
+
+}
+// handleAPI('hello');
+
+async function validateSynonym(word){
+  if (synonymSet.has(word)){
+    return true;
+  }
+  else{
+    return false;
+  }
 }
 
-module.exports = {
-  hello,
-  btnClick,
-};
+async function validateWord(word){
+  const inputElement = document.getElementById('user_text');
+  }
+
+}
+// module.exports = {
+//   hello,
+//   btnClick,
+//   handleAPI,
+// };
