@@ -20,5 +20,9 @@ The goal of this game is to expand your vocabulary by playing a synonym game
 
 ## Engineering Requirements
 
-- [ ] Use typescript
+- [x] Use typescript
 - [ ] Test behaviour with unit tests
+
+## Notes
+
+To transpile to js during development use: `npx tsc --watch` 
