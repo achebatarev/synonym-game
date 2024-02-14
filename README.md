@@ -22,6 +22,7 @@ The goal of this game is to expand your vocabulary by playing a synonym game
 
 - [x] Use typescript
 - [ ] Test behaviour with unit tests
+    - [ ] Figure out to how to transpile tests to js
 
 ## Notes
 
