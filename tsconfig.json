@@ -4,7 +4,12 @@
         "module": "commonjs",
         "outDir": "dist",
         "strict": true,
-        "sourceMap": true,
+        "sourceMap": false,
         "declaration": true
-    }
+    },
+    "exclude": [
+        "tests",
+        "dist",
+        "node_modules"
+    ]
 }

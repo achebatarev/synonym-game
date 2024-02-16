@@ -22,8 +22,16 @@ The goal of this game is to expand your vocabulary by playing a synonym game
 
 - [x] Use typescript
 - [ ] Test behaviour with unit tests
-    - [ ] Figure out to how to transpile tests to js
+
+## TODO
+
+- [x] Send request to api on a button click and display them 
+- [ ] Figure out how to register the button click handler so that it'd work for both testing and web
 
 ## Notes
 
-To transpile to js during development use: `npx tsc --watch` 
+- To transpile to js during development use: `npx tsc --watch` 
+- Jest has support for tests written in ts
+- Jest has a whole issue with fail function: https://github.com/jestjs/jest/issues/11698 
+    - throw new Error instead
+- Don't test functions, test behaviour
