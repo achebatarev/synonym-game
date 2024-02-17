@@ -10,6 +10,7 @@ const html = fs.readFileSync(path.resolve(__dirname, '../index.html'), 'utf8');
 
 const main = require('../src/main');
 
+
 beforeEach(() => {
     window.document.body.innerHTML = html
 })
@@ -27,6 +28,7 @@ test('testing test', () => {
 test('renders h1 element', () => {
     expect(document.querySelector('h1')).not.toBeNull();
 });
+
 // TODO: mock the bevhiour of sendRequest function to return specific words
 // NOTE: Event register seems to operate on a different document then this test,
 test('test registering btn click listener works', () => {

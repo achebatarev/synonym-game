@@ -6,9 +6,7 @@ function hello() {
 function registerEventListener() {
     console.log("I'm registered")
     const generateBtn = window.document.getElementById('btn');
-    hello()
     let word = 'lackadaisical'
-    const wrapper = async (_: Event) => await processRequest(word);
     if (generateBtn) {
         generateBtn.addEventListener('click', wrapper);
     }
@@ -16,6 +14,12 @@ function registerEventListener() {
         throw new Error('no such button here chief')
     }
 }
+
+const wrapper = (_: Event) => {
+    let word = (document.getElementById("input") as HTMLInputElement).value
+    processRequest(word);
+}
+
 //TODO: figure out a way to redact this secret when pushing to github
 const options = {
     method: 'GET',
@@ -28,9 +32,7 @@ const options = {
 async function processRequest(word: string) {
     console.log("Processing the request");
     const words = await sendRequest(word);
-    console.log(words)
-    console.log('This is async processing', window.document)
-    const newDiv = await document.createElement('div');
+    const newDiv = document.createElement('div');
     newDiv.id = 'words';
     newDiv.textContent = words;
     window.document.body.appendChild(newDiv)

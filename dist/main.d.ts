@@ -1,5 +1,6 @@
 declare function hello(): string;
 declare function registerEventListener(): void;
+declare const wrapper: (_: Event) => void;
 declare const options: {
     method: string;
     headers: {
