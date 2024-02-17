@@ -6,7 +6,7 @@ The goal of this game is to expand your vocabulary by playing a synonym game
 
 - [x] To start the game users should select a word
 - [x] A user can enter a word and the system will check if it's a synonym or not
-- [ ] For each correct answer, add points
+- [x] For each correct answer, add points
 - [ ] If the word is not found within a minute game over
     - [ ] Display points at the end of the game
 

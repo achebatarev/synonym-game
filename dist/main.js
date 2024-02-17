@@ -1,9 +1,56 @@
 "use strict";
+;
 const globalState = {
     word: "",
     synonyms: [],
-    points: 0
+    points: 0,
+    wordsEntered: []
 };
+//TODO: figure out a way to redact this secret when pushing to github
+const options = {
+    method: 'GET',
+    headers: {
+        'X-RapidAPI-Key': '',
+        'X-RapidAPI-Host': 'wordsapiv1.p.rapidapi.com',
+    },
+};
+// ##################
+// ##### HELPER #####
+// ##################
+//
+function checkIfSynonym(word) {
+    if (globalState.synonyms.includes(word))
+        return true;
+    return false;
+}
+function updatePoints() {
+    const p = document.getElementById("points");
+    if (!p)
+        throw new Error("points are not found");
+    p.textContent = `Points: ${globalState.points}`;
+}
+async function sendRequest(word) {
+    const resp = await fetch(`https://wordsapiv1.p.rapidapi.com/words/${word}/synonyms`, options);
+    const result = await resp.json();
+    return result === null || result === void 0 ? void 0 : result.synonyms;
+}
+//TODO: Display win or lose message
+function evaluateWord() {
+    let word = document.getElementById("synonymInput").value;
+    if (globalState.wordsEntered.includes(word)) {
+        throw new Error("Enter another word");
+    }
+    globalState.wordsEntered.push(word);
+    const isSynonym = checkIfSynonym(word);
+    if (isSynonym) {
+        globalState.points += 20;
+        updatePoints();
+    }
+    console.log(globalState);
+}
+// ##########################
+// ##### EVENT LISTENER #####
+// ##########################
 function registerEventListener() {
     console.log("I'm registered");
     const generateBtn = window.document.getElementById('btn');
@@ -19,28 +66,18 @@ const registerNewWord = (_) => {
     globalState.word = word;
     processRequest();
 };
-//TODO: figure out a way to redact this secret when pushing to github
-const options = {
-    method: 'GET',
-    headers: {
-        'X-RapidAPI-Key': '',
-        'X-RapidAPI-Host': 'wordsapiv1.p.rapidapi.com',
-    },
-};
-function checkIfSynonym(word) {
-    if (globalState.synonyms.includes(word))
-        return true;
-    return false;
-}
-//TODO: Display win or lose message
-function evaluateWord() {
-    let word = document.getElementById("synonymInput").value;
-    const isSynonym = checkIfSynonym(word);
-    if (isSynonym) {
-        globalState.points += 20;
-    }
+async function processRequest() {
+    console.log("Processing the request");
+    let word = globalState.word;
+    const words = await sendRequest(word);
+    globalState.synonyms = words;
+    const gameDiv = createGameDiv();
+    window.document.body.appendChild(gameDiv);
     console.log(globalState);
 }
+// ##############################
+// ##### ELEMENT GENERATORS #####
+// ##############################
 function createGameDiv() {
     const newDiv = document.createElement('div');
     newDiv.id = 'words';
@@ -53,24 +90,17 @@ function createGameDiv() {
     const btn = document.createElement("button");
     btn.addEventListener("click", evaluateWord);
     btn.textContent = "Verify";
+    const points = document.createElement("p");
+    points.setAttribute("id", "points");
+    points.textContent = `Points: ${globalState.points}`;
     newDiv.appendChild(input);
     newDiv.appendChild(btn);
+    newDiv.appendChild(points);
     return newDiv;
 }
-async function processRequest() {
-    console.log("Processing the request");
-    let word = globalState.word;
-    const words = await sendRequest(word);
-    globalState.synonyms = words;
-    const gameDiv = createGameDiv();
-    window.document.body.appendChild(gameDiv);
-    console.log(globalState);
-}
-async function sendRequest(word) {
-    const resp = await fetch(`https://wordsapiv1.p.rapidapi.com/words/${word}/synonyms`, options);
-    const result = await resp.json();
-    return result === null || result === void 0 ? void 0 : result.synonyms;
-}
+// ##################
+// ##### EXPORT #####
+// ##################
 if (typeof module == 'undefined') {
     registerEventListener();
 }
