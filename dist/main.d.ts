@@ -3,6 +3,7 @@ interface globalStateObject {
     synonyms: string[];
     points: number;
     wordsEntered: string[];
+    time: number;
 }
 declare const globalState: globalStateObject;
 declare const options: {
@@ -14,8 +15,10 @@ declare const options: {
 };
 declare function checkIfSynonym(word: string): boolean;
 declare function updatePoints(): void;
+declare function updateTime(): void;
 declare function sendRequest(word: string): Promise<any>;
 declare function evaluateWord(): void;
+declare function launchTimer(): void;
 declare function registerEventListener(): void;
 declare const registerNewWord: (_: Event) => void;
 declare function processRequest(): Promise<void>;

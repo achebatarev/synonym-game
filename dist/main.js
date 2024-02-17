@@ -4,7 +4,8 @@ const globalState = {
     word: "",
     synonyms: [],
     points: 0,
-    wordsEntered: []
+    wordsEntered: [],
+    time: 0
 };
 //TODO: figure out a way to redact this secret when pushing to github
 const options = {
@@ -17,7 +18,6 @@ const options = {
 // ##################
 // ##### HELPER #####
 // ##################
-//
 function checkIfSynonym(word) {
     if (globalState.synonyms.includes(word))
         return true;
@@ -28,6 +28,12 @@ function updatePoints() {
     if (!p)
         throw new Error("points are not found");
     p.textContent = `Points: ${globalState.points}`;
+}
+function updateTime() {
+    const t = document.getElementById("timer");
+    if (!t)
+        throw new Error("Timer is not found");
+    t.textContent = `Time: 00:${globalState.time}`;
 }
 async function sendRequest(word) {
     const resp = await fetch(`https://wordsapiv1.p.rapidapi.com/words/${word}/synonyms`, options);
@@ -47,6 +53,15 @@ function evaluateWord() {
         updatePoints();
     }
     console.log(globalState);
+}
+function launchTimer() {
+    let intervalId;
+    intervalId = setInterval(() => {
+        globalState.time--;
+        updateTime();
+        if (globalState.time <= 0)
+            clearInterval(intervalId);
+    }, 1000);
 }
 // ##########################
 // ##### EVENT LISTENER #####
@@ -73,6 +88,7 @@ async function processRequest() {
     globalState.synonyms = words;
     const gameDiv = createGameDiv();
     window.document.body.appendChild(gameDiv);
+    launchTimer();
     console.log(globalState);
 }
 // ##############################
@@ -93,9 +109,13 @@ function createGameDiv() {
     const points = document.createElement("p");
     points.setAttribute("id", "points");
     points.textContent = `Points: ${globalState.points}`;
+    const timer = document.createElement("p");
+    timer.setAttribute("id", "timer");
+    globalState.time = 60;
     newDiv.appendChild(input);
     newDiv.appendChild(btn);
     newDiv.appendChild(points);
+    newDiv.appendChild(timer);
     return newDiv;
 }
 // ##################

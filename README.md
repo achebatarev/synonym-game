@@ -26,7 +26,7 @@ The goal of this game is to expand your vocabulary by playing a synonym game
 ## TODO
 
 - [x] Send request to api on a button click and display them 
-- [ ] Figure out how to register the button click handler so that it'd work for both testing and web
+- [ ] Figure out how to restart the game
 
 ## Notes
 

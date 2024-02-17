@@ -6,14 +6,16 @@ interface globalStateObject {
     word: string,
     synonyms: string[]
     points: number,
-    wordsEntered: string[]
+    wordsEntered: string[],
+    time: number,
 };
 
 const globalState: globalStateObject = {
     word: "",
     synonyms: [],
     points: 0,
-    wordsEntered: []
+    wordsEntered: [],
+    time: 0
 };
 
 //TODO: figure out a way to redact this secret when pushing to github
@@ -28,7 +30,7 @@ const options = {
 // ##################
 // ##### HELPER #####
 // ##################
-//
+
 function checkIfSynonym(word: string): boolean {
     if (globalState.synonyms.includes(word))
         return true
@@ -40,6 +42,14 @@ function updatePoints() {
     if (!p)
         throw new Error("points are not found")
     p.textContent = `Points: ${globalState.points}`
+}
+
+
+function updateTime() {
+    const t = document.getElementById("timer")
+    if (!t)
+        throw new Error("Timer is not found")
+    t.textContent = `Time: 00:${globalState.time}`
 }
 
 async function sendRequest(word: string) {
@@ -63,6 +73,16 @@ function evaluateWord() {
     }
 
     console.log(globalState)
+}
+
+function launchTimer() {
+    let intervalId: NodeJS.Timeout;
+    intervalId = setInterval(() => {
+        globalState.time--;
+        updateTime();
+        if (globalState.time <= 0)
+            clearInterval(intervalId);
+    }, 1000)
 }
 
 
@@ -91,13 +111,15 @@ const registerNewWord = (_: Event) => {
 
 async function processRequest() {
     console.log("Processing the request");
-    let word = globalState.word
+    let word = globalState.word;
     const words = await sendRequest(word);
-    globalState.synonyms = words
+    globalState.synonyms = words;
 
 
-    const gameDiv = createGameDiv()
-    window.document.body.appendChild(gameDiv)
+    const gameDiv = createGameDiv();
+    window.document.body.appendChild(gameDiv);
+
+    launchTimer();
 
     console.log(globalState)
 }
@@ -126,9 +148,14 @@ function createGameDiv() {
     points.setAttribute("id", "points")
     points.textContent = `Points: ${globalState.points}`
 
+    const timer = document.createElement("p")
+    timer.setAttribute("id", "timer")
+    globalState.time = 60
+
     newDiv.appendChild(input)
     newDiv.appendChild(btn)
     newDiv.appendChild(points)
+    newDiv.appendChild(timer)
 
     return newDiv
 
