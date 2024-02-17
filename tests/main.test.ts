@@ -1,29 +1,21 @@
 /**
  * @jest-environment jsdom
  */
-
 import { TextEncoder, TextDecoder } from 'util';
-
 Object.assign(global, { TextDecoder, TextEncoder });
+
 const path = require('path');
 const fs = require('fs');
 const html = fs.readFileSync(path.resolve(__dirname, '../index.html'), 'utf8');
 
-const { JSDOM } = require('jsdom');
 const main = require('../src/main');
 
-let win: Window;
-let doc: Document;
-
 beforeEach(() => {
-    let dom = new JSDOM(html);
-    win = dom.window
-    doc = dom.window.document;
-});
-
+    window.document.body.innerHTML = html
+})
 
 test('use jsdom in this test file', () => {
-    const element = win.document.createElement('div');
+    const element = window.document.createElement('div');
     expect(element).not.toBeNull();
 });
 
@@ -33,19 +25,20 @@ test('testing test', () => {
 });
 
 test('renders h1 element', () => {
-    expect(doc.querySelector('h1')).not.toBeNull();
+    expect(document.querySelector('h1')).not.toBeNull();
 });
 // TODO: mock the bevhiour of sendRequest function to return specific words
+// NOTE: Event register seems to operate on a different document then this test,
 test('test registering btn click listener works', () => {
-    let btn = doc.getElementById('btn')
-    console.log(btn?.textContent)
+    let btn = document.getElementById('btn');
+    main.registerEventListener()
     if (btn) {
         btn.click()
     }
     else {
         throw new Error('btn is not found');
     }
-    let element = doc.getElementById('words')
+    let element = document.getElementById('words')
     expect(element).not.toBeNull();
     expect(element?.textContent).toEqual('hello, world')
 });
