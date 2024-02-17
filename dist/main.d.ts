@@ -1,6 +1,11 @@
-declare function hello(): string;
+interface globalStateObject {
+    word: string;
+    synonyms: string[];
+    points: number;
+}
+declare const globalState: globalStateObject;
 declare function registerEventListener(): void;
-declare const wrapper: (_: Event) => void;
+declare const registerNewWord: (_: Event) => void;
 declare const options: {
     method: string;
     headers: {
@@ -8,5 +13,8 @@ declare const options: {
         'X-RapidAPI-Host': string;
     };
 };
-declare function processRequest(word: string): Promise<void>;
-declare function sendRequest(word: string): Promise<string>;
+declare function checkIfSynonym(word: string): boolean;
+declare function evaluateWord(): void;
+declare function createGameDiv(): HTMLDivElement;
+declare function processRequest(): Promise<void>;
+declare function sendRequest(word: string): Promise<any>;
