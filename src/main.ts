@@ -52,6 +52,15 @@ function updateTime() {
     t.textContent = `Time: 00:${globalState.time}`
 }
 
+function updateParent(div: HTMLElement) {
+    const parent = document.getElementById("parent")
+    const oldDiv = parent?.querySelector("div")
+    if (!parent || !oldDiv) {
+        throw new Error("Parent or oldDiv is not found")
+    }
+    parent.replaceChild(div, oldDiv)
+}
+
 async function sendRequest(word: string) {
     const resp = await fetch(`https://wordsapiv1.p.rapidapi.com/words/${word}/synonyms`, options);
     const result = await resp.json();
@@ -80,8 +89,10 @@ function launchTimer() {
     intervalId = setInterval(() => {
         globalState.time--;
         updateTime();
-        if (globalState.time <= 0)
+        if (globalState.time <= 0) {
+            endGame();
             clearInterval(intervalId);
+        }
     }, 1000)
 }
 
@@ -95,39 +106,76 @@ function registerEventListener() {
     console.log("I'm registered")
     const generateBtn = window.document.getElementById('btn');
     if (generateBtn) {
-        generateBtn.addEventListener('click', registerNewWord);
+        generateBtn.addEventListener('click', startGame);
     }
     else {
         throw new Error('no such button here chief')
     }
 }
 
-const registerNewWord = (_: Event) => {
+async function startGame(_: Event) {
     let word = (document.getElementById("initialInput") as HTMLInputElement).value
     globalState.word = word
-    processRequest();
-}
-
-
-async function processRequest() {
     console.log("Processing the request");
-    let word = globalState.word;
     const words = await sendRequest(word);
     globalState.synonyms = words;
 
 
     const gameDiv = createGameDiv();
-    window.document.body.appendChild(gameDiv);
+    updateParent(gameDiv)
 
     launchTimer();
-
     console.log(globalState)
 }
+
+function endGame() {
+    const div = createEndGameDiv()
+    updateParent(div)
+}
+
 
 // ##############################
 // ##### ELEMENT GENERATORS #####
 // ##############################
 
+//NOTE: Recreate vs Store? The benefits of recreating is no state changes, but potential slow down in performance
+// For this use case, unless, I experience significant slowdowns, recreate is better
+function createStartGameDiv() {
+    const div = document.createElement("div");
+    div.id = "startGame";
+
+    const input = document.createElement("input");
+    input.placeholder = "Enter your word";
+    // TODO: This is for testing convenience, remove this later
+    input.value = "good";
+    input.id = "initialInput";
+
+    const btn = document.createElement("button");
+    btn.textContent = "Start Game"
+    div.appendChild(input)
+    div.appendChild(btn)
+    return div
+}
+
+function createEndGameDiv() {
+    const div = document.createElement("div");
+    div.id = "endGame";
+
+    const message = document.createElement("p")
+    message.id = "message"
+    message.textContent = "This is it, you're done"
+
+    const points = document.createElement("p")
+    points.id = "points"
+    points.textContent = `Final points: ${globalState.points}`
+
+    //TODO: create a button to start the game all over
+
+    div.appendChild(message)
+    div.appendChild(points)
+
+    return div
+}
 
 function createGameDiv() {
     const newDiv = document.createElement('div');
@@ -158,7 +206,6 @@ function createGameDiv() {
     newDiv.appendChild(timer)
 
     return newDiv
-
 }
 
 // ##################
@@ -172,7 +219,7 @@ if (typeof module == 'undefined') {
 if (typeof module !== 'undefined') {
     module.exports = {
         registerEventListener,
-        processRequest,
+        processRequest: startGame,
         sendRequest,
     };
 };

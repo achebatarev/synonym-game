@@ -16,10 +16,13 @@ declare const options: {
 declare function checkIfSynonym(word: string): boolean;
 declare function updatePoints(): void;
 declare function updateTime(): void;
+declare function updateParent(div: HTMLElement): void;
 declare function sendRequest(word: string): Promise<any>;
 declare function evaluateWord(): void;
 declare function launchTimer(): void;
 declare function registerEventListener(): void;
-declare const registerNewWord: (_: Event) => void;
-declare function processRequest(): Promise<void>;
+declare function startGame(_: Event): Promise<void>;
+declare function endGame(): void;
+declare function createStartGameDiv(): HTMLDivElement;
+declare function createEndGameDiv(): HTMLDivElement;
 declare function createGameDiv(): HTMLDivElement;
