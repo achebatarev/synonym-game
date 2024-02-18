@@ -67,7 +67,6 @@ async function sendRequest(word: string) {
     return result?.synonyms
 }
 
-//TODO: Display win or lose message
 function evaluateWord() {
     let word = (document.getElementById("synonymInput") as HTMLInputElement).value
     if (globalState.wordsEntered.includes(word)) {
@@ -144,16 +143,19 @@ function endGame() {
 function createStartGameDiv() {
     const div = document.createElement("div");
     div.id = "startGame";
+    div.classList.value = "bg-gray-100 p-4 rounded-lg shadow-md"
 
     const input = document.createElement("input");
     input.placeholder = "Enter your word";
-    // TODO: This is for testing convenience, remove this later
-    input.value = "good";
+
+    input.classList.value = "w-full border border-gray-300 rounded px-3 py-2 mb-2";
     input.id = "initialInput";
 
     const btn = document.createElement("button");
     btn.textContent = "Start Game"
+    btn.classList.value = "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
     btn.addEventListener('click', startGame);
+
 
     div.appendChild(input)
     div.appendChild(btn)
@@ -163,6 +165,7 @@ function createStartGameDiv() {
 function createEndGameDiv() {
     const div = document.createElement("div");
     div.id = "endGame";
+    div.classList.value = "bg-gray-100 p-4 rounded-lg shadow-md"
 
     const message = document.createElement("p")
     message.id = "message"
@@ -172,9 +175,9 @@ function createEndGameDiv() {
     points.id = "points"
     points.textContent = `Final points: ${globalState.points}`
 
-    //TODO: create a button to start the game all over
     const btn = document.createElement("button")
     btn.textContent = "Start new game"
+    btn.classList.value = "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
     btn.addEventListener("click", start)
 
     div.appendChild(message)
@@ -185,11 +188,13 @@ function createEndGameDiv() {
 }
 
 function createGameDiv() {
-    const newDiv = document.createElement('div');
-    newDiv.id = 'words';
-    newDiv.textContent = `The word you selected is "${globalState.word}"`;
+    const div = document.createElement('div');
+    div.id = 'words';
+    div.textContent = `The word you selected is "${globalState.word}"`;
+    div.classList.value = "bg-gray-100 p-4 rounded-lg shadow-md"
 
     const input = document.createElement("input")
+    input.classList.value = "w-full border border-gray-300 rounded px-3 py-2 mb-2";
     input.setAttribute("type", "text")
     input.setAttribute("placeholder", "Select Synonym")
     input.setAttribute("value", "sound")
@@ -198,6 +203,7 @@ function createGameDiv() {
     const btn = document.createElement("button")
     btn.addEventListener("click", evaluateWord)
     btn.textContent = "Verify"
+    btn.classList.value = "bg-sky-600 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
 
     const points = document.createElement("p")
     points.setAttribute("id", "points")
@@ -207,12 +213,12 @@ function createGameDiv() {
     timer.setAttribute("id", "timer")
     globalState.time = 60
 
-    newDiv.appendChild(input)
-    newDiv.appendChild(btn)
-    newDiv.appendChild(points)
-    newDiv.appendChild(timer)
+    div.appendChild(input)
+    div.appendChild(btn)
+    div.appendChild(points)
+    div.appendChild(timer)
 
-    return newDiv
+    return div
 }
 
 // ##################

@@ -12,7 +12,7 @@ The goal of this game is to expand your vocabulary by playing a synonym game
 
 ### Strech Goals
 
-- [ ] Make it look pretty
+- [x] Make it look pretty
 - [ ] Allow multiple users to join and play the game
 - [ ] Allow users to configure
     - [ ] time to find a synonym 
