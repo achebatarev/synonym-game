@@ -77,7 +77,6 @@ function launchTimer() {
 // ##### EVENT LISTENER #####
 // ##########################
 function registerEventListener() {
-    console.log("I'm registered");
     const generateBtn = window.document.getElementById('btn');
     if (generateBtn) {
         generateBtn.addEventListener('click', startGame);
@@ -85,6 +84,10 @@ function registerEventListener() {
     else {
         throw new Error('no such button here chief');
     }
+}
+function start() {
+    const div = createStartGameDiv();
+    updateParent(div);
 }
 async function startGame(_) {
     let word = document.getElementById("initialInput").value;
@@ -116,6 +119,7 @@ function createStartGameDiv() {
     input.id = "initialInput";
     const btn = document.createElement("button");
     btn.textContent = "Start Game";
+    btn.addEventListener('click', startGame);
     div.appendChild(input);
     div.appendChild(btn);
     return div;
@@ -130,8 +134,12 @@ function createEndGameDiv() {
     points.id = "points";
     points.textContent = `Final points: ${globalState.points}`;
     //TODO: create a button to start the game all over
+    const btn = document.createElement("button");
+    btn.textContent = "Start new game";
+    btn.addEventListener("click", start);
     div.appendChild(message);
     div.appendChild(points);
+    div.appendChild(btn);
     return div;
 }
 function createGameDiv() {
@@ -162,7 +170,7 @@ function createGameDiv() {
 // ##### EXPORT #####
 // ##################
 if (typeof module == 'undefined') {
-    registerEventListener();
+    start();
 }
 if (typeof module !== 'undefined') {
     module.exports = {

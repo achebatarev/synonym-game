@@ -73,7 +73,6 @@ function evaluateWord() {
     if (globalState.wordsEntered.includes(word)) {
         throw new Error("Enter another word")
     }
-
     globalState.wordsEntered.push(word)
     const isSynonym = checkIfSynonym(word)
     if (isSynonym) {
@@ -96,14 +95,12 @@ function launchTimer() {
     }, 1000)
 }
 
-
 // ##########################
 // ##### EVENT LISTENER #####
 // ##########################
 
 
 function registerEventListener() {
-    console.log("I'm registered")
     const generateBtn = window.document.getElementById('btn');
     if (generateBtn) {
         generateBtn.addEventListener('click', startGame);
@@ -111,6 +108,11 @@ function registerEventListener() {
     else {
         throw new Error('no such button here chief')
     }
+}
+
+function start() {
+    const div = createStartGameDiv()
+    updateParent(div)
 }
 
 async function startGame(_: Event) {
@@ -133,7 +135,6 @@ function endGame() {
     updateParent(div)
 }
 
-
 // ##############################
 // ##### ELEMENT GENERATORS #####
 // ##############################
@@ -152,6 +153,8 @@ function createStartGameDiv() {
 
     const btn = document.createElement("button");
     btn.textContent = "Start Game"
+    btn.addEventListener('click', startGame);
+
     div.appendChild(input)
     div.appendChild(btn)
     return div
@@ -170,9 +173,13 @@ function createEndGameDiv() {
     points.textContent = `Final points: ${globalState.points}`
 
     //TODO: create a button to start the game all over
+    const btn = document.createElement("button")
+    btn.textContent = "Start new game"
+    btn.addEventListener("click", start)
 
     div.appendChild(message)
     div.appendChild(points)
+    div.appendChild(btn)
 
     return div
 }
@@ -213,7 +220,7 @@ function createGameDiv() {
 // ##################
 
 if (typeof module == 'undefined') {
-    registerEventListener()
+    start()
 }
 
 if (typeof module !== 'undefined') {

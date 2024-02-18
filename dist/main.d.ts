@@ -21,6 +21,7 @@ declare function sendRequest(word: string): Promise<any>;
 declare function evaluateWord(): void;
 declare function launchTimer(): void;
 declare function registerEventListener(): void;
+declare function start(): void;
 declare function startGame(_: Event): Promise<void>;
 declare function endGame(): void;
 declare function createStartGameDiv(): HTMLDivElement;
